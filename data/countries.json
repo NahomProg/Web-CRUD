@@ -1,0 +1,56 @@
+[
+  {
+    "id": 1,
+    "name": "Ethiopia",
+    "capital": "Addis Ababa",
+    "population": 123000000,
+    "continent": "Africa",
+    "language": "Amharic",
+    "currency": "Ethiopian Birr"
+  },
+  {
+    "id": 2,
+    "name": "Japan",
+    "capital": "Tokyo",
+    "population": 125700000,
+    "continent": "Asia",
+    "language": "Japanese",
+    "currency": "Japanese Yen"
+  },
+  {
+    "id": 3,
+    "name": "USA",
+    "capital": "Washington D.C.",
+    "population": 331900000,
+    "continent": "North America",
+    "language": "English",
+    "currency": "US Dollar"
+  },
+  {
+    "id": 4,
+    "name": "England",
+    "capital": "London",
+    "population": 56000000,
+    "continent": "Europe",
+    "language": "English",
+    "currency": "British Pound"
+  },
+  {
+    "id": 5,
+    "name": "France",
+    "capital": "Paris",
+    "population": 67390000,
+    "continent": "Europe",
+    "language": "French",
+    "currency": "Euro"
+  },
+  {
+    "name": "Germany",
+    "capital": "Berlin",
+    "population": 83120000,
+    "continent": "Europe",
+    "language": "German",
+    "currency": "Euro",
+    "id": 6
+  }
+]
