@@ -1,16 +1,21 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
-const countries = require('./data/countries.json');
 
 const server = http.createServer((req, res) => {
     console.log('URL ::', req.url);
 
     if (req.url === '/api/countries' && req.method === 'GET') {
+        const countriesDataPath = path.join(__dirname, 'data', 'countries.json');
+        const data = fs.readFileSync(countriesDataPath, 'utf-8');
+        const countries = JSON.parse(data);
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(countries));
-    } 
+    }
     else if (req.url.startsWith('/api/countries/') && req.method === 'GET') {
+        const countriesDataPath = path.join(__dirname, 'data', 'countries.json');
+        const data = fs.readFileSync(countriesDataPath, 'utf-8');
+        const countries = JSON.parse(data);
         const countryId = req.url.split('/')[3];
         const country = countries.find(c => c.id === parseInt(countryId));
         
@@ -29,16 +34,13 @@ const server = http.createServer((req, res) => {
         });
         req.on('end', () => {
             const newCountry = JSON.parse(body);
-            
             const countriesDataPath = path.join(__dirname, 'data', 'countries.json');
             const data = fs.readFileSync(countriesDataPath, 'utf-8');
             const countriesArray = JSON.parse(data);
             
             const newId = countriesArray.length > 0 ? countriesArray[countriesArray.length - 1].id + 1 : 1;
             newCountry.id = newId;
-            
             countriesArray.push(newCountry);
-            
             fs.writeFileSync(countriesDataPath, JSON.stringify(countriesArray, null, 2));
             
             res.writeHead(201, { 'Content-Type': 'application/json' });
@@ -47,7 +49,7 @@ const server = http.createServer((req, res) => {
     }
     else {
         res.writeHead(404, { 'Content-Type': 'text/plain' });
-        res.end('Server Running');
+        res.end('Not Found');
     }
 });
 
