@@ -47,6 +47,49 @@ const server = http.createServer((req, res) => {
             res.end(JSON.stringify(newCountry));
         });
     }
+    else if (req.url.startsWith('/api/countries/') && req.method === 'PUT') {
+        let body = '';
+        req.on('data', chunk => {
+            body += chunk.toString();
+        });
+        req.on('end', () => {
+            const updatedData = JSON.parse(body);
+            const countryId = parseInt(req.url.split('/')[3]);
+            const countriesDataPath = path.join(__dirname, 'data', 'countries.json');
+            const data = fs.readFileSync(countriesDataPath, 'utf-8');
+            const countriesArray = JSON.parse(data);
+            
+            const index = countriesArray.findIndex(c => c.id === countryId);
+            
+            if (index !== -1) {
+                countriesArray[index] = { ...countriesArray[index], ...updatedData, id: countryId };
+                fs.writeFileSync(countriesDataPath, JSON.stringify(countriesArray, null, 2));
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify(countriesArray[index]));
+            } else {
+                res.writeHead(404, { 'Content-Type': 'text/plain' });
+                res.end('Country Not Found');
+            }
+        });
+    }
+    else if (req.url.startsWith('/api/countries/') && req.method === 'DELETE') {
+        const countryId = parseInt(req.url.split('/')[3]);
+        const countriesDataPath = path.join(__dirname, 'data', 'countries.json');
+        const data = fs.readFileSync(countriesDataPath, 'utf-8');
+        const countriesArray = JSON.parse(data);
+        
+        const index = countriesArray.findIndex(c => c.id === countryId);
+        
+        if (index !== -1) {
+            const deleted = countriesArray.splice(index, 1);
+            fs.writeFileSync(countriesDataPath, JSON.stringify(countriesArray, null, 2));
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ message: 'Deleted successfully', country: deleted[0] }));
+        } else {
+            res.writeHead(404, { 'Content-Type': 'text/plain' });
+            res.end('Country Not Found');
+        }
+    }
     else {
         res.writeHead(404, { 'Content-Type': 'text/plain' });
         res.end('Not Found');
